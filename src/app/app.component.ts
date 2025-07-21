@@ -52,36 +52,27 @@ export class AppComponent {
     if(this.componentData[matchingComponentKeyword] !== undefined) {
       let matchingComponentGroup: ComponentCategory = this.componentData[matchingComponentKeyword]
 
-      // find components with >1 matching keyword (current logic)
-      var componentVariants = Object.values(matchingComponentGroup)
-      var foundComponents = componentVariants.filter(componentMetaData => {
-        if(componentMetaData.keywords.some(kw => userInputKeywords.includes(kw))) {
-          return componentMetaData
-        }
-      })
-
       // Update this to collect how many keywords matched.
       // If none have a keyword count match (0), return all 
       // If all matching have a keyword count match of 1, return all
       // If any components have a keyword count match over 1, return all greater than 1
 
-      // var componentVariants = Object.values(matchingComponentGroup)
+      var componentVariants = Object.values(matchingComponentGroup)
 
-      // componentVariants.map(component => {
-      //   const overlap = userInputKeywords.length + component.keywords.length - new Set(userInputKeywords.concat(component.keywords)).size;
+      var componentOverlaps = componentVariants.map(component => {
+        const overlap = userInputKeywords.length + component.keywords.length - new Set(userInputKeywords.concat(component.keywords)).size;
 
-      //   component.overlap = overlap
-      //   console.log(component.overlap)
-      // })
-
-
-      var foundComponents = componentVariants.filter(componentMetaData => {
-        if(componentMetaData.keywords.some(kw => userInputKeywords.includes(kw))) {
-          return componentMetaData
-        }
+        component.overlap = overlap
+        return overlap
       })
 
-      let returnComponents = foundComponents.length > 0 ? foundComponents : componentVariants
+      var overlapTotal = componentOverlaps.reduce((accumulator, currentValue) => (accumulator + currentValue))
+      var highestOverlapValue = Math.max(...componentVariants.map(o => o.overlap))
+      var allOverlapsTheSame = componentOverlaps.every(overlap => overlap === componentOverlaps[0])
+
+
+      let returnComponents = overlapTotal == 0 || allOverlapsTheSame ? componentVariants : componentVariants.filter(component => component.overlap == highestOverlapValue)
+
       console.log(returnComponents.map(component => component.label))
       console.log(returnComponents.map(component => component.html))
     }
