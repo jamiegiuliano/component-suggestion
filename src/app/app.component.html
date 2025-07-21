@@ -181,9 +181,12 @@
         <div v-input-container>
 
           <!-- ADD API RESPONSES HERE -->
+          <ng-container *ngFor="let component of suggestedComponents; index as i;">
+            <h2>{{ component.label }}</h2>
+            <p>{{ component.html }}</p>
+          </ng-container>
           
           <textarea v-input required #userInput noResize style="block-size: 400px;"id="fixed-height-textarea"></textarea>
-
         </div>
 
           <div vFlex vGap="16">

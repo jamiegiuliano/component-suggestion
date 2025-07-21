@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NovaLibModule } from '@visa/nova-angular';
 import { ComponentCategory, ComponentData, ComponentVariant } from './Component';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
-    NovaLibModule
+    NovaLibModule,
+    NgFor
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -17,10 +19,7 @@ import { ComponentCategory, ComponentData, ComponentVariant } from './Component'
 export class AppComponent {
   title = 'component-suggestion';
 
-  // knownKeywords: { [key: string]: string[] } = {
-  //   components: [ "button" ],
-  //   keywords: ["primary", "secondary", "leading", "trailing", "disabled", "text", "icon" ]
-  // }
+  suggestedComponents: ComponentVariant[];
 
   // Dictionary of component Data
   componentData: ComponentData = {
@@ -46,16 +45,13 @@ export class AppComponent {
     }
   };
 
-  getComponent(userInputKeywords: string[]): void {
+  getComponent(userInputKeywords: string[]): ComponentVariant[] {
     var matchingComponentKeyword = userInputKeywords.find(keyword => Object.keys(this.componentData).includes(keyword)) ?? ""
-    
-    if(this.componentData[matchingComponentKeyword] !== undefined) {
-      let matchingComponentGroup: ComponentCategory = this.componentData[matchingComponentKeyword]
-      let returnComponents = this.filterComponents(userInputKeywords, matchingComponentGroup)
 
-      console.log(returnComponents.map(component => component.label))
-      console.log(returnComponents.map(component => component.html))
-    }
+    if (this.componentData[matchingComponentKeyword] === undefined) { return []}
+    
+    let matchingComponentGroup: ComponentCategory = this.componentData[matchingComponentKeyword]
+    return this.filterComponents(userInputKeywords, matchingComponentGroup)
   };
 
   // Update this to collect how many keywords matched.
@@ -85,9 +81,8 @@ export class AppComponent {
 
   handleSubmit(userInput: HTMLTextAreaElement): void {
     var userInputKeywords: string[] = userInput.value.toLowerCase().split(" ")
-    
-    this.getComponent(userInputKeywords)
-    // console.log(Object.values(this.componentData[userInputKeywords]).map(component => component.label ))
-    // console.log(Object.values(this.componentData[userInputKeywords]).map(component => component.html ))
+
+    this.suggestedComponents = this.getComponent(userInputKeywords)
+
   };
 }
