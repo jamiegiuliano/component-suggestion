@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { NovaLibModule } from '@visa/nova-angular';
 import { ComponentCategory, ComponentData, ComponentVariant } from './Component';
 import { NgFor } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,8 @@ import { NgFor } from '@angular/common';
   imports: [
     RouterOutlet,
     NovaLibModule,
-    NgFor
+    NgFor,
+    FormsModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -19,7 +21,9 @@ import { NgFor } from '@angular/common';
 export class AppComponent {
   title = 'component-suggestion';
 
+  userInput: string = '';
   suggestedComponents: ComponentVariant[];
+  userInputsCollection: string[];
 
   // Dictionary of component Data
   componentData: ComponentData = {
@@ -79,8 +83,10 @@ export class AppComponent {
     }
   }
 
-  handleSubmit(userInput: HTMLTextAreaElement): void {
-    var userInputKeywords: string[] = userInput.value.toLowerCase().split(" ")
+  handleSubmit(userInput: string): void {
+    this.userInputsCollection = [userInput]
+    this.userInput = ''
+    var userInputKeywords: string[] = userInput.toLowerCase().split(" ")
 
     this.suggestedComponents = this.getComponent(userInputKeywords)
   };

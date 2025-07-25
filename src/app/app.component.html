@@ -193,11 +193,15 @@
       </ng-container>
       
       <!-- User Input -->
-      <div class="right-row-item">
-        <div v-section v-message messageType="subtle" class="message-item">other button</div>
-      </div>
+      <ng-container *ngFor="let input of userInputsCollection; index as i;">
+        <div class="right-row-item">
+          <div v-section v-message messageType="subtle" class="message-item">
+            <h2>{{ input }}</h2>
+          </div>
+        </div>
+      </ng-container>
 
-      <textarea v-input required #userInput noResize style="block-size: 400px;"id="fixed-height-textarea"></textarea>
+      <textarea v-input required [(ngModel)]="userInput" noResize style="block-size: 400px;"id="fixed-height-textarea"></textarea>
     </div>
 
     <!-- Submit Button -->
