@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NovaLibModule } from '@visa/nova-angular';
-import { ComponentCategory, ComponentData, ComponentVariant } from './Component';
+import { ComponentCategory, ComponentData, ComponentVariant, DialogRow } from './Component';
 import { NgFor } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormGroup, FormControl } from '@angular/forms';
+import { KeyValuePipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ import { FormGroup, FormControl } from '@angular/forms';
     NovaLibModule,
     NgFor,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    KeyValuePipe
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -25,6 +27,9 @@ export class AppComponent {
 
   suggestedComponents: any[] = [];
   userInputsCollection: any[] = [];
+
+  dialogCollection: any[] = [];
+
 
   myForm: FormGroup;
 
@@ -99,10 +104,14 @@ export class AppComponent {
 
   handleSubmit(): void {
     var latestUserInput = this.myForm.value.userInput
-    this.userInputsCollection.push(latestUserInput)
     var userInputKeywords: string[] = latestUserInput.toLowerCase().split(" ")
 
-    this.suggestedComponents.push(...this.getComponent(userInputKeywords))
+    const dialogRow: DialogRow = {
+        userInput: latestUserInput,
+        apiResponse: this.getComponent(userInputKeywords)
+    }
+
+    this.dialogCollection.push(dialogRow)
     this.resetForm()
   };
 }

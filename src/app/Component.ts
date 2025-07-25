@@ -12,3 +12,8 @@ export interface ComponentCategory {
 export interface ComponentData {
   [categoryName: string]: ComponentCategory;
 }
+
+export interface DialogRow {
+    userInput: string,
+    apiResponse: ComponentVariant[]
+}

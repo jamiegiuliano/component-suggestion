@@ -182,27 +182,33 @@
     
     <!-- Dialog Container -->
     <div class="flex-container" v-input-container vFlex vFlexCol>
-      <ng-container *ngFor="let component of suggestedComponents; index as i;">
+      <ng-container *ngFor="let dialogRow of dialogCollection | keyvalue">
 
       <!-- Response -->
-      <div class="left-row-item">
+      <div class="left-row-item" *ngFor="let component of dialogRow.value.apiResponse; index as i;">
         <div v-section v-message vFlex vFlexCol vGap="4" class="message-item">
           <h2>{{ component.label }}</h2>
           <div>{{ component.html }}</div>
         </div>
       </div>
-      </ng-container>
       
       <!-- User Input -->
-      <ng-container *ngFor="let input of userInputsCollection; index as i;">
         <div class="right-row-item">
           <div v-section v-message messageType="subtle" class="message-item">
-            <h2>{{ input }}</h2>
+            <h2>{{ dialogRow.value.userInput }}</h2>
           </div>
         </div>
       </ng-container>
 
-      <textarea v-input required formControlName="userInput" noResize style="block-size: 400px;"id="fixed-height-textarea"></textarea>
+      <!-- Text Area -->
+      <textarea 
+      v-input 
+      required 
+      formControlName="userInput" 
+      noResize
+      style="block-size: 130px"
+      id="fixed-height-textarea"
+      placeholder="Start typing..."></textarea>
 
     </div>
 
