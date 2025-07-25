@@ -175,6 +175,7 @@
 
 <main class="main">
   <div class="content">
+    <form [formGroup]="myForm" (ngSubmit)="handleSubmit()">
 
     <div vFlex vGap="4" vFlexCol vFlexGrow>
     <label v-label for="fixed-height-textarea">What UI are you creating?</label>
@@ -201,14 +202,16 @@
         </div>
       </ng-container>
 
-      <textarea v-input required [(ngModel)]="userInput" noResize style="block-size: 400px;"id="fixed-height-textarea"></textarea>
+      <textarea v-input required formControlName="userInput" noResize style="block-size: 400px;"id="fixed-height-textarea"></textarea>
+
     </div>
 
     <!-- Submit Button -->
     <div vFlex vGap="16">
-      <button v-button vMT="8" (click)="handleSubmit(userInput)">Submit</button>
+      <button v-button vMT="8" type="submit">Submit</button>
     </div>
   </div>
+  </form>
 
   </div>
 </main>

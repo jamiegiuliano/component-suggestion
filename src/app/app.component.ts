@@ -3,7 +3,8 @@ import { RouterOutlet } from '@angular/router';
 import { NovaLibModule } from '@visa/nova-angular';
 import { ComponentCategory, ComponentData, ComponentVariant } from './Component';
 import { NgFor } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,8 @@ import { FormsModule } from '@angular/forms';
     RouterOutlet,
     NovaLibModule,
     NgFor,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -21,9 +23,16 @@ import { FormsModule } from '@angular/forms';
 export class AppComponent {
   title = 'component-suggestion';
 
-  userInput: string = '';
-  suggestedComponents: ComponentVariant[];
-  userInputsCollection: string[];
+  suggestedComponents: any[] = [];
+  userInputsCollection: any[] = [];
+
+  myForm: FormGroup;
+
+  constructor() {
+  this.myForm = new FormGroup({
+      userInput: new FormControl('')
+    });
+  }
 
   // Dictionary of component Data
   componentData: ComponentData = {
@@ -83,11 +92,17 @@ export class AppComponent {
     }
   }
 
-  handleSubmit(userInput: string): void {
-    this.userInputsCollection = [userInput]
-    this.userInput = ''
-    var userInputKeywords: string[] = userInput.toLowerCase().split(" ")
+  resetForm(): void {
+    this.myForm.value.userInput = ''
+    this.myForm.reset()
+  }
 
-    this.suggestedComponents = this.getComponent(userInputKeywords)
+  handleSubmit(): void {
+    var latestUserInput = this.myForm.value.userInput
+    this.userInputsCollection.push(latestUserInput)
+    var userInputKeywords: string[] = latestUserInput.toLowerCase().split(" ")
+
+    this.suggestedComponents.push(...this.getComponent(userInputKeywords))
+    this.resetForm()
   };
 }
