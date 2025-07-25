@@ -48,7 +48,7 @@ export class AppComponent {
   getComponent(userInputKeywords: string[]): ComponentVariant[] {
     var matchingComponentKeyword = userInputKeywords.find(keyword => Object.keys(this.componentData).includes(keyword)) ?? ""
 
-    if (this.componentData[matchingComponentKeyword] === undefined) { return []}
+    if (this.componentData[matchingComponentKeyword] === undefined) { return [] }
     
     let matchingComponentGroup: ComponentCategory = this.componentData[matchingComponentKeyword]
     return this.filterComponents(userInputKeywords, matchingComponentGroup)
@@ -83,6 +83,5 @@ export class AppComponent {
     var userInputKeywords: string[] = userInput.value.toLowerCase().split(" ")
 
     this.suggestedComponents = this.getComponent(userInputKeywords)
-
   };
 }

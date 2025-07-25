@@ -176,27 +176,36 @@
 <main class="main">
   <div class="content">
 
-      <div vFlex vGap="4" vFlexCol vFlexGrow>
-        <label v-label for="fixed-height-textarea">What UI are you creating?</label>
-        <div v-input-container>
+    <div vFlex vGap="4" vFlexCol vFlexGrow>
+    <label v-label for="fixed-height-textarea">What UI are you creating?</label>
+    
+    <!-- Dialog Container -->
+    <div class="flex-container" v-input-container vFlex vFlexCol>
+      <ng-container *ngFor="let component of suggestedComponents; index as i;">
 
-          <!-- ADD API RESPONSES HERE -->
-          <ng-container *ngFor="let component of suggestedComponents; index as i;">
-            <h2>{{ component.label }}</h2>
-            <p>{{ component.html }}</p>
-          </ng-container>
-          
-          <textarea v-input required #userInput noResize style="block-size: 400px;"id="fixed-height-textarea"></textarea>
+      <!-- Response -->
+      <div class="left-row-item">
+        <div v-section v-message vFlex vFlexCol vGap="4" class="message-item">
+          <h2>{{ component.label }}</h2>
+          <div>{{ component.html }}</div>
         </div>
-
-          <div vFlex vGap="16">
-            <button v-button vMT="8" (click)="handleSubmit(userInput)">Submit</button>
-          </div>
       </div>
-    <!-- <div class="left-side"></div> -->
-    <!-- <div class="divider" role="separator" aria-label="Divider"></div>
-    <div class="right-side">
-    </div> -->
+      </ng-container>
+      
+      <!-- User Input -->
+      <div class="right-row-item">
+        <div v-section v-message messageType="subtle" class="message-item">other button</div>
+      </div>
+
+      <textarea v-input required #userInput noResize style="block-size: 400px;"id="fixed-height-textarea"></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div vFlex vGap="16">
+      <button v-button vMT="8" (click)="handleSubmit(userInput)">Submit</button>
+    </div>
+  </div>
+
   </div>
 </main>
 

@@ -1,0 +1,24 @@
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-height: 700px;
+}
+
+.left-row-item {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%; 
+}
+
+.right-row-item {
+  display: flex;
+  justify-content: flex-end; 
+  flex-wrap: wrap;
+  width: 100%; 
+}
+
+.message-item {
+    width: 75%;
+}
