@@ -1,6 +1,8 @@
 # ComponentSuggestion
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+https://componentsuggestions.netlify.app
+
+Provides suggested components and corresponding HTML from the [Visa Product Design System](https://design.visa.com/) based of the user's input.
 
 ## Development server
 
