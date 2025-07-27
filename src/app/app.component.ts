@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NovaLibModule } from '@visa/nova-angular';
-import { ComponentCategory, ComponentData, ComponentVariant, DialogRow } from './Component';
+import { ComponentCategory, ComponentData, ComponentVariant, ComponentObject, DialogRow } from './Component';
 import { NgFor } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { KeyValuePipe, CommonModule } from '@angular/common';
@@ -77,7 +77,7 @@ export class AppComponent {
       },
       "input-with-inline-message": {
         label: "Input with Inline Message",
-        keywords: [ "inline message" ],
+        keywords: [ "inline", "message" ],
         html: `<div vFlex vGap="4" vFlexCol>
   <label v-label for="inline-message-input">Label (required)</label>
   <div v-input-container>
@@ -90,43 +90,45 @@ export class AppComponent {
     }
   };
 
-  getComponent(userInputKeywords: string[]): ComponentVariant[] {
-    var keywords = userInputKeywords.map(keyword => {
-      if (Object.keys(this.componentData).includes(keyword)) {
-        return keyword
-      }
-    })
-    console.log(keywords)
-    var matchingComponentKeyword = userInputKeywords.find(keyword => Object.keys(this.componentData).includes(keyword)) ?? ""
+  getComponent(userInputKeywords: string[]): ComponentObject[] {
+    var matchingComponentKeywords = userInputKeywords.filter(keyword => Object.keys(this.componentData).includes(keyword))
+    if (matchingComponentKeywords.length === 0) { return [] }
 
-    if (this.componentData[matchingComponentKeyword] === undefined) { return [] }
-    let matchingComponentGroup: ComponentCategory = this.componentData[matchingComponentKeyword]
-    return this.filterComponents(userInputKeywords, matchingComponentGroup)
+    let filteredKeywords = matchingComponentKeywords.filter(keyword => this.componentData[keyword] !== undefined)
+    let matchingComponentGroups: ComponentCategory[] = filteredKeywords.map(keyword => {
+      return this.componentData[keyword]
+    })
+
+    return this.filterComponents(userInputKeywords, matchingComponentGroups)
   };
 
   // Update this to collect how many keywords matched.
   // If none have a keyword count match (0), return all 
   // If all matching have a keyword count match of 1, return all
   // If any components have a keyword count match over 1, return all greater than 1
-  filterComponents(userInputKeywords: string[], matchingComponentGroup: ComponentCategory): ComponentVariant[] {
-    var componentVariants = Object.values(matchingComponentGroup)
-    var componentOverlaps = componentVariants.map(component => {
-      const overlap = userInputKeywords.length + component.keywords.length - new Set(userInputKeywords.concat(component.keywords)).size;
+  filterComponents(userInputKeywords: string[], matchingComponentGroups: ComponentCategory[]): ComponentObject[] {
+    var componentVariantGroups = matchingComponentGroups.map(group => Object.values(group))
 
-      component.overlap = overlap
-      return overlap
+    return componentVariantGroups.flatMap(componentVariantArray => {
+      var componentVariantObjectArray = componentVariantArray.map(compVar => compVar as ComponentObject)
+      let componentOverlaps = componentVariantObjectArray.map(component => {
+        const overlap = userInputKeywords.length + component.keywords.length - new Set(userInputKeywords.concat(component.keywords)).size;
+
+        component.overlap = overlap
+        return overlap
+      })
+
+      var overlapTotal = componentOverlaps.reduce((accumulator, currentValue) => (accumulator + currentValue))
+      var allOverlapsTheSame = componentOverlaps.every(overlap => overlap === componentOverlaps[0])
+
+      if (overlapTotal == 0 || allOverlapsTheSame) {
+        return componentVariantObjectArray
+      } else {
+        var highestOverlapValue = Math.max(...componentVariantArray.map(o => o.overlap))
+
+        return componentVariantObjectArray.filter(component => component.overlap == highestOverlapValue)
+      }
     })
-
-    var overlapTotal = componentOverlaps.reduce((accumulator, currentValue) => (accumulator + currentValue))
-    var allOverlapsTheSame = componentOverlaps.every(overlap => overlap === componentOverlaps[0])
-
-    if (overlapTotal == 0 || allOverlapsTheSame) {
-      return componentVariants
-    } else {
-      var highestOverlapValue = Math.max(...componentVariants.map(o => o.overlap))
-
-      return componentVariants.filter(component => component.overlap == highestOverlapValue)
-    }
   }
 
   resetForm(): void {
