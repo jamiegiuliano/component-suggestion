@@ -184,6 +184,13 @@
     <div class="flex-container" v-input-container vFlex vFlexCol>
       <ng-container *ngFor="let dialogRow of dialogCollection | keyvalue">
 
+      <!-- User Input -->
+      <div class="right-row-item">
+        <div v-section v-message messageType="subtle" class="message-item">
+          <h2>{{ dialogRow.value.userInput }}</h2>
+        </div>
+      </div>
+
       <!-- Response -->
       <div class="left-row-item" *ngFor="let component of dialogRow.value.apiResponse; index as i;">
         <div v-section v-message vGap="4" class="message-item">
@@ -202,13 +209,6 @@
           </div>
         </div>
       </div>
-      
-      <!-- User Input -->
-        <div class="right-row-item">
-          <div v-section v-message messageType="subtle" class="message-item">
-            <h2>{{ dialogRow.value.userInput }}</h2>
-          </div>
-        </div>
       </ng-container>
 
       <!-- Text Area -->
