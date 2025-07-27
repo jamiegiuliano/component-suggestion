@@ -22,3 +22,11 @@
 .message-item {
     width: 75%;
 }
+
+.message-item-content {
+  width: 95%;
+}
+
+.copy-button {
+  justify-content:right;
+}

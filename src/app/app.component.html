@@ -186,9 +186,20 @@
 
       <!-- Response -->
       <div class="left-row-item" *ngFor="let component of dialogRow.value.apiResponse; index as i;">
-        <div v-section v-message vFlex vFlexCol vGap="4" class="message-item">
-          <h2>{{ component.label }}</h2>
-          <div>{{ component.html }}</div>
+        <div v-section v-message vGap="4" class="message-item">
+          <div xFlex vFlexCol class="message-item-content">
+            <h2>{{ component.label }}</h2>
+            <div>{{ component.html }}</div>
+          </div>
+
+          <div vFlex vFlexCol class="copy-button">
+            <button aria-label="copy"
+                    class="v-button v-button-icon v-button-tertiary v-button-small v-button-subtle"
+                    type="button"
+                    (click)="copyText(component.html)">
+              <svg v-icon-visa-copy-tiny aria-label="visa copy tiny"></svg>
+            </button>
+          </div>
         </div>
       </div>
       

@@ -3,9 +3,9 @@ import { RouterOutlet } from '@angular/router';
 import { NovaLibModule } from '@visa/nova-angular';
 import { ComponentCategory, ComponentData, ComponentVariant, DialogRow } from './Component';
 import { NgFor } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormGroup, FormControl } from '@angular/forms';
-import { KeyValuePipe } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { KeyValuePipe, CommonModule } from '@angular/common';
+import { VisaCopyTiny } from "@visa/nova-icons-angular"; 
 
 @Component({
   selector: 'app-root',
@@ -16,7 +16,9 @@ import { KeyValuePipe } from '@angular/common';
     NgFor,
     FormsModule,
     ReactiveFormsModule,
-    KeyValuePipe
+    KeyValuePipe,
+    VisaCopyTiny,
+    CommonModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -60,14 +62,44 @@ export class AppComponent {
         html: "<button v-button v-icon-two-color>Primary action<svg v-icon-visa-file-upload-tiny></svg></button>",
         overlap: 0
       }
+    },
+    input: {
+      "default-input": {
+        label: "Default input",
+        keywords: [ "standard", "plain", "simple", "default" ],
+        html: `<div vFlex vGap="4" vFlexCol>
+  <label v-label for="default-input-single-line">Label (required)</label>
+  <div v-input-container>
+    <input v-input required id="default-input-single-line" />
+  </div>
+</div>`,
+        overlap: 0
+      },
+      "input-with-inline-message": {
+        label: "Input with Inline Message",
+        keywords: [ "inline message" ],
+        html: `<div vFlex vGap="4" vFlexCol>
+  <label v-label for="inline-message-input">Label (required)</label>
+  <div v-input-container>
+    <input v-input required id="inline-message-input" aria-describedby="inline-message" />
+  </div>
+  <span v-input-message id="inline-message">This is optional text that describes the label in more detail.</span>
+</div>`,
+       overlap: 0
+      }
     }
   };
 
   getComponent(userInputKeywords: string[]): ComponentVariant[] {
+    var keywords = userInputKeywords.map(keyword => {
+      if (Object.keys(this.componentData).includes(keyword)) {
+        return keyword
+      }
+    })
+    console.log(keywords)
     var matchingComponentKeyword = userInputKeywords.find(keyword => Object.keys(this.componentData).includes(keyword)) ?? ""
 
     if (this.componentData[matchingComponentKeyword] === undefined) { return [] }
-    
     let matchingComponentGroup: ComponentCategory = this.componentData[matchingComponentKeyword]
     return this.filterComponents(userInputKeywords, matchingComponentGroup)
   };
@@ -114,4 +146,14 @@ export class AppComponent {
     this.dialogCollection.push(dialogRow)
     this.resetForm()
   };
+
+  copyText(html: string): void {
+    navigator.clipboard.writeText(html)
+      .then(() => {
+        console.log('Text copied successfully!');
+      })
+      .catch(err => {
+        console.error('Failed to copy text:', err);
+      });
+  }
 }
