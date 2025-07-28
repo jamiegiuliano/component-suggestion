@@ -2,6 +2,8 @@
 
 https://componentsuggestions.netlify.app
 
+![component suggestion](https://github.com/user-attachments/assets/4b042e43-e378-43d8-9504-308d31ab69f1)
+
 Provides suggested components and corresponding HTML from the [Visa Product Design System](https://design.visa.com/) based of the user's input.
 
 Currently only includes data for Buttons, Radios, and Inputs. Component data can be found in `src/app/assets/data/components.json`.
