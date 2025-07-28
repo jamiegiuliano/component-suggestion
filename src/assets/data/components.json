@@ -17,16 +17,40 @@
             "keywords": [ "primary", "text", "trailing", "icon" ],
             "html": "<button v-button v-icon-two-color>Primary action<svg v-icon-visa-file-upload-tiny></svg></button>",
             "overlap": 0
+        },
+        "with-label": {
+            "label": "Radio Button with Label",
+            "keywords": ["radio", "label"],
+            "html": "<div class='v-flex v-align-items-center v-gap-2'>\n<input class='v-radio' id='radio-default' name='radio-test-1' type='radio'/>\n<label class='v-label v-typography-label-large' for='radio-default'>Label\n</label>\n</div>",
+            "overlap": 0
+        },
+        "without-label": {
+            "label": "Radio Button without Visible Label",
+            "keywords": ["radio", "without", "label", "visible", "alone"],
+            "html": "<input aria-label='Standalone radio button' class='v-radio' id='radio-standalone' name='radio-test-2' type='radio'/>",
+            "overlap": 0
+        },
+        "with-description": {
+            "label": "Radio Button with Description",
+            "keywords": ["radio", "with", "description", "secondary", "label"],
+            "html": "<fieldset aria-labelledby='radio-message-1'>\n<div class='v-flex v-gap-2'>\n<input class='v-radio' id='radio-message' name='radio-test-8' type='radio'/>\n<div class='v-flex v-flex-col v-gap-2 v-my-8'>\n<label class='v-label v-typography-label-large' for='radio-message'>\nLabel\n</label>\n<div class='v-input-message' id='radio-message-1'>\nThis is optional text that describes the label in more detail.\n</div>\n</div>\n</div>\n</fieldset>",
+            "overlap": 0
+        },
+        "selected": {
+            "label": "Selected Radio Button",
+            "keywords": ["radio", "selected", "filled"],
+            "html": "<div class='v-flex v-align-items-center v-gap-2'>\n<input checked='' class='v-radio' id='radio-checked' name='radio-test-3' type='radio'/>\n<label class='v-label v-typography-label-large' for='radio-checked'>\nLabel\n</label>\n</div>",
+            "overlap": 0
         }
     },
     "input": {
-        "default-input": {
+        "default": {
             "label": "Default input",
             "keywords": [ "standard", "plain", "simple", "default" ],
             "html": "<div vFlex vGap='4' vFlexCol>\n<label v-label for='default-input-single-line'>Label (required)</label>\n<div v-input-container>\n<input v-input required id='default-input-single-line' />\n</div>\n</div>",
             "overlap": 0
         },
-        "input-with-inline-message": {
+        "with-inline-message": {
             "label": "Input with Inline Message",
             "keywords": [ "inline", "message" ],
             "html": "<div vFlex vGap='4' vFlexCol>\n<label v-label for='inline-message-input'>Label (required)</label>\n<div v-input-container>\n<input v-input required id='inline-message-input' aria-describedby='inline-message' />\n</div>\n<span v-input-message id='inline-message'>This is optional text that describes the label in more detail.</span>\n</div>",
