@@ -66,28 +66,29 @@ export class DialogContainerComponent implements OnInit {
     return this.filterComponents(userInputKeywords, matchingComponentGroups)
   };
 
-    // Update this to collect how many keywords matched.
-    // If none have a keyword count match (0), return all 
-    // If all matching have a keyword count match of 1, return all
-    // If any components have a keyword count match over 1, return all greater than 1
+    // Matches the user's input to any component group keywords (ie. 'button') and then collects components from that group
+    // by checking the component's keywords (ie. 'primary', 'text').
     filterComponents(userInputKeywords: string[], matchingComponentGroups: ComponentCategory[]): ComponentObject[] {
+      // ie. ['button', 'input']
       var componentVariantGroups = matchingComponentGroups.map(group => Object.values(group))
   
       return componentVariantGroups.flatMap(componentVariantArray => {
         var componentVariantObjectArray = componentVariantArray.map(compVar => compVar as ComponentObject)
-        let componentOverlaps = componentVariantObjectArray.map(component => {
+        let allComponentOverlaps = componentVariantObjectArray.map(component => {
           const overlap = userInputKeywords.length + component.keywords.length - new Set(userInputKeywords.concat(component.keywords)).size;
   
           component.overlap = overlap
           return overlap
         })
   
-        var overlapTotal = componentOverlaps.reduce((accumulator, currentValue) => (accumulator + currentValue))
-        var allOverlapsTheSame = componentOverlaps.every(overlap => overlap === componentOverlaps[0])
-  
+        var overlapTotal = allComponentOverlaps.reduce((accumulator, currentValue) => (accumulator + currentValue))
+        var allOverlapsTheSame = allComponentOverlaps.every(overlap => overlap === allComponentOverlaps[0])
+        
+        // If none have a keyword count match (0), return all OR
+        // if all matching have a keyword count match of 1, return all
         if (overlapTotal == 0 || allOverlapsTheSame) {
           return componentVariantObjectArray
-        } else {
+        } else { // If any components have a keyword count match over 1, return all greater than 1
           var highestOverlapValue = Math.max(...componentVariantArray.map(o => o.overlap))
   
           return componentVariantObjectArray.filter(component => component.overlap == highestOverlapValue)
@@ -95,6 +96,7 @@ export class DialogContainerComponent implements OnInit {
       });
     }
 
+  // Clears the user's input from the textfield and resets the form so the user can submit input again
   resetForm(): void {
     this.myForm.value.userInput = ''
     this.myForm.reset()
