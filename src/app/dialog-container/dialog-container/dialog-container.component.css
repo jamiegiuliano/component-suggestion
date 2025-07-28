@@ -1,0 +1,32 @@
+.flex-container {
+  display: flex;
+  width: 900px;
+  height: 600px;
+  overflow: scroll;
+}
+
+.left-row-item {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%; 
+}
+
+.right-row-item {
+  display: flex;
+  justify-content: flex-end; 
+  flex-wrap: wrap;
+  width: 100%; 
+}
+
+.message-item {
+    width: 75%;
+}
+
+.message-item-content {
+  width: 95%;
+}
+
+.copy-button {
+  justify-content:right;
+}
