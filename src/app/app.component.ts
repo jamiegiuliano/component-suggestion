@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NovaLibModule } from '@visa/nova-angular';
-import { KeyValuePipe, CommonModule } from '@angular/common';
-import { VisaCopyTiny } from "@visa/nova-icons-angular";
 import { DialogContainerComponent } from './dialog-container/dialog-container/dialog-container.component'
 
 @Component({
@@ -10,10 +7,6 @@ import { DialogContainerComponent } from './dialog-container/dialog-container/di
   standalone: true,
   imports: [
     RouterOutlet,
-    NovaLibModule,
-    KeyValuePipe,
-    VisaCopyTiny,
-    CommonModule,
     DialogContainerComponent
   ],
   templateUrl: './app.component.html',

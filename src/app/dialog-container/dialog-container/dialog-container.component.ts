@@ -1,7 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { KeyValuePipe, CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ComponentCategory, ComponentData, ComponentObject, DialogRow } from '../../Component';
+import { NovaLibModule } from '@visa/nova-angular';
+import { VisaCopyTiny } from "@visa/nova-icons-angular";
 import { NgFor } from '@angular/common';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-container',
@@ -9,78 +14,53 @@ import { NgFor } from '@angular/common';
   imports: [
     NgFor,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    KeyValuePipe,
+    CommonModule,
+    NovaLibModule,
+    VisaCopyTiny,
+    HttpClientModule
   ],
   templateUrl: './dialog-container.component.html',
   styleUrl: './dialog-container.component.css'
 })
-export class DialogContainerComponent {
+export class DialogContainerComponent implements OnInit {
+  componentData: ComponentData = {}
   dialogCollection: any[] = [];
 
   myForm: FormGroup;
 
-  constructor() {
+  constructor(private http: HttpClient) {
   this.myForm = new FormGroup({
       userInput: new FormControl('')
     });
   }
 
-  // Dictionary of component Data
-  componentData: ComponentData = {
-    button: {
-      "primary-text-button": {
-        label: "Primary Text Button",
-        keywords: [ "primary", "text" ],
-        html: "<button v-button>Primary action</button>",
-        overlap: 0
+  ngOnInit(): void {
+    this.getAllComponents().subscribe({
+      next: (value) => {
+        this.componentData = value;
       },
-      "primary-text-button-with-leading-icon": {
-        label: "Primary Text Button with Leading Icon",
-        keywords: [ "primary", "text", "leading", "icon" ],
-        html: "<button v-button v-icon-two-color><svg v-icon-visa-file-upload-tiny></svg>Primary action</button>",
-        overlap: 0
+      error: (err) => {
+        console.error('An error occurred:', err);
       },
-      "primary-text-button-with-trailing-icon": {
-        label: "Primary Text Button with Trailing Icon",
-        keywords: [ "primary", "text", "trailing", "icon" ],
-        html: "<button v-button v-icon-two-color>Primary action<svg v-icon-visa-file-upload-tiny></svg></button>",
-        overlap: 0
+      complete: () => {
+        console.log('Observable completed.');
       }
-    },
-    input: {
-      "default-input": {
-        label: "Default input",
-        keywords: [ "standard", "plain", "simple", "default" ],
-        html: `<div vFlex vGap="4" vFlexCol>
-  <label v-label for="default-input-single-line">Label (required)</label>
-  <div v-input-container>
-    <input v-input required id="default-input-single-line" />
-  </div>
-</div>`,
-        overlap: 0
-      },
-      "input-with-inline-message": {
-        label: "Input with Inline Message",
-        keywords: [ "inline", "message" ],
-        html: `<div vFlex vGap="4" vFlexCol>
-  <label v-label for="inline-message-input">Label (required)</label>
-  <div v-input-container>
-    <input v-input required id="inline-message-input" aria-describedby="inline-message" />
-  </div>
-  <span v-input-message id="inline-message">This is optional text that describes the label in more detail.</span>
-</div>`,
-       overlap: 0
-      }
-    }
+    });
   };
+
+  getAllComponents(): Observable<ComponentData> {
+    return this.http.get<ComponentData>('assets/data/components.json');
+  }
 
   getComponent(userInputKeywords: string[]): ComponentObject[] {
     var matchingComponentKeywords = userInputKeywords.filter(keyword => Object.keys(this.componentData).includes(keyword))
     if (matchingComponentKeywords.length === 0) { return [] }
 
-    let filteredKeywords = matchingComponentKeywords.filter(keyword => this.componentData[keyword] !== undefined)
-    let matchingComponentGroups: ComponentCategory[] = filteredKeywords.map(keyword => {
-      return this.componentData[keyword]
+    let filteredKeywords = matchingComponentKeywords.filter(categoryName => this.componentData[categoryName] !== undefined)
+    let matchingComponentGroups: ComponentCategory[] = filteredKeywords.map(variantName => {
+      return this.componentData[variantName]
     })
 
     return this.filterComponents(userInputKeywords, matchingComponentGroups)
