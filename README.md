@@ -4,6 +4,10 @@ https://componentsuggestions.netlify.app
 
 Provides suggested components and corresponding HTML from the [Visa Product Design System](https://design.visa.com/) based of the user's input.
 
+Currently only includes data for Buttons, Radios, and Inputs. Component data can be found in `src/app/assets/data/components.json`.
+
+Check out [Jira](https://jamiepgiuliano.atlassian.net/jira/software/projects/OPS/boards/1) for a few rough stories and next steps.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
